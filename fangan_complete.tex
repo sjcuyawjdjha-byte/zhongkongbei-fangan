@@ -1,64 +1,78 @@
 \documentclass[UTF8, 12pt, a4paper]{ctexart}
 
 % ==================== 宏包加载 ====================
-\usepackage{geometry}    
-\usepackage{amsmath}     
-\usepackage{graphicx}    
-\usepackage{booktabs}    
-\usepackage{tabularx}    
-\usepackage{hyperref}    
-\usepackage{xcolor}      
-\usepackage{caption}     
-\usepackage{cite}        
-\usepackage{makecell}    
-\usepackage{multirow}    
-\usepackage{enumitem}    
-\usepackage{array}       
+\usepackage{geometry}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{caption}
+\usepackage{cite}
+\usepackage{makecell}
+\usepackage{multirow}
+\usepackage{enumitem}
+\usepackage{array}
+\usepackage{float}
+\usepackage{titlesec}
 
 % 【核心新增神器】：tcolorbox 用于绘制支持自动跨页的精美边框
-\usepackage[most]{tcolorbox} 
+\usepackage[most]{tcolorbox}
 
 % ==================== 全局格式设置 ====================
-\geometry{left=2.5cm, right=2.5cm, top=3cm, bottom=3cm}
+\geometry{left=2.5cm, right=2.5cm, top=2.8cm, bottom=2.8cm}
+
+% 定义主题色
+\definecolor{themeblue}{RGB}{0, 82, 155}
+\definecolor{themegray}{RGB}{90, 90, 90}
+\definecolor{lightgray}{RGB}{245, 245, 245}
+\definecolor{tablerule}{RGB}{60, 60, 60}
+\definecolor{sectioncolor}{RGB}{0, 70, 140}
 
 \hypersetup{
     colorlinks=true,
-    linkcolor=blue!70!black,
-    citecolor=blue!70!black,
-    urlcolor=blue!70!black
+    linkcolor=themeblue,
+    citecolor=themeblue,
+    urlcolor=themeblue
 }
 
-\captionsetup{font=small, labelfont=bf}
+\captionsetup{
+    font={small, sf},
+    labelfont={bf, color=themeblue},
+    labelsep=quad,
+    skip=8pt
+}
 \graphicspath{{images/}}
 
-\newcommand{\mybody}{\songti\fontsize{10.5bp}{20bp}\selectfont\color{black}}
+\newcommand{\mybody}{\songti\fontsize{10.5bp}{18bp}\selectfont\color{black}}
 \newcolumntype{C}{>{\centering\arraybackslash}X}
 
 % ==================== 页眉页脚设置 ====================
-\usepackage{fancyhdr}    
-\pagestyle{fancy}        
-\fancyhf{}               
-\renewcommand{\headrulewidth}{0.4pt} 
-\renewcommand{\footrulewidth}{0pt}   
-\fancyhead[C]{\footnotesize 宇宙无敌暴龙战士队---王睿恒-队长学号---队员 1 姓名-杨林涛 3250106024---队员 2 姓名-王彬玮 }
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.6pt}
+\renewcommand{\footrulewidth}{0pt}
+\fancyhead[C]{\small\color{themegray} 宇宙无敌暴龙战士队 \quad|\quad 王睿恒（队长）\quad 杨林涛 \quad 王彬玮}
+\fancyfoot[C]{\small\color{themegray} \thepage}
 
 % ==================== 1. 带表头的标准报告外框 ====================
 \newtcolorbox{reportframe}[1][]{
     enhanced,
-    breakable,           
-    colback=white,       
-    colframe=black,      
-    boxrule=0.5pt,       % 外部大黑框的粗细
-    arc=0pt,             
+    breakable,
+    colback=white,
+    colframe=black,
+    boxrule=0.6pt,
+    arc=0pt,
     outer arc=0pt,
-    boxsep=0pt,          
-    left=1.5em, right=1.5em, top=1.5em, bottom=1.5em, 
+    boxsep=0pt,
+    left=1.8em, right=1.8em, top=1.5em, bottom=1.5em,
     title={%
         \renewcommand{\arraystretch}{1.8}%
-        \setlength{\arrayrulewidth}{1pt}% 【线条加粗】：将表头内部的线条加粗到 1pt
-        % 【修复语法报错】：\hsize 严格放置在 >{} 内部
+        \setlength{\arrayrulewidth}{0.6pt}%
         \begin{tabularx}{\linewidth}{@{} >{\hsize=1.4\hsize\centering\arraybackslash}X | >{\hsize=0.6\hsize\centering\arraybackslash}X @{}}
-            \multicolumn{2}{c}{\zihao{-4} \bfseries 第 21 届 “中控杯” 浙江大学机器人竞赛} \\
+            \multicolumn{2}{c}{\zihao{-4} \bfseries 第 21 届 "中控杯" 浙江大学机器人竞赛} \\
             \hline
             \multirow{2}{*}{\zihao{1} \bfseries 技术方案文档} & {\zihao{5} 参赛项目} \\
             \cline{2-2}
@@ -67,63 +81,81 @@
     },
     coltitle=black,
     colbacktitle=white,
-    titlerule=1pt,       % 【线条加粗】：表头与正文之间的横线也加粗到 1pt 保持统一
+    titlerule=0.6pt,
     toptitle=0pt,
     bottomtitle=0pt,
     fonttitle=\normalfont,
-    #1                   % 【修复报错】：补全了漏掉的 1
+    #1
 }
 
 % ==================== 2. 无表头的续页纯净外框 ====================
 \newtcolorbox{reportframe_notitle}[1][]{
     enhanced,
-    breakable,           
-    colback=white,       
-    colframe=black,      
-    boxrule=0.5pt,       
-    arc=0pt,             
+    breakable,
+    colback=white,
+    colframe=black,
+    boxrule=0.6pt,
+    arc=0pt,
     outer arc=0pt,
-    boxsep=0pt,          
-    left=1.5em, right=1.5em, top=1.5em, bottom=1.5em, 
+    boxsep=0pt,
+    left=1.8em, right=1.8em, top=1.5em, bottom=1.5em,
     #1
+}
+
+% ==================== 自定义节标题命令 ====================
+\newcommand{\sectiontitle}[1]{%
+    \vspace{0.5em}%
+    {\zihao{4}\bfseries\color{sectioncolor} #1}%
+    \vspace{0.3em}%
+    \par\noindent\textcolor{sectioncolor}{\rule{\linewidth}{0.8pt}}%
+    \vspace{0.8em}%
+}
+
+% ==================== 自定义小节标题命令 ====================
+\newcommand{\subsectiontitle}[1]{%
+    \vspace{0.6em}%
+    \noindent{\color{sectioncolor}\vrule width 3pt height 1em depth 0.2em\hspace{0.5em}}%
+    \textbf{#1}%
+    \vspace{0.3em}\par%
 }
 
 % ==================== 正文部分 ====================
 \begin{document}
 
 % -------------------- 封面 --------------------
-\begin{figure}[htbp] 
-    \centering 
-    \includegraphics[width=0.8\textwidth]{image1.png} 
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.8\textwidth]{image1.png}
 \end{figure}
 
 \begin{center}
-    \vspace*{0.5cm} 
-    {\zihao{1} \bfseries 第 21 届} \\[1.2cm] 
-    {\zihao{1} \bfseries “中控杯” 浙江大学机器人竞赛} \\[1.5cm]
+    \vspace*{0.5cm}
+    {\zihao{1} \bfseries 第 21 届} \\[1.2cm]
+    {\zihao{1} \bfseries "中控杯" 浙江大学机器人竞赛} \\[1.5cm]
     {\zihao{2} 创新机器人制作竞赛} \\[0.6cm]
     {\zihao{2} 创新组技术方案设计报告}
-    \vspace{1cm} 
+    \vspace{1cm}
 \end{center}
 
 \begin{center}
-    \renewcommand{\arraystretch}{2.2} 
-    \begin{tabularx}{0.85\textwidth}{| >{\centering\arraybackslash}p{4cm} | C |}
-        \hline 
-        {\zihao{3} 团队名称：} & {\zihao{3} 宇宙无敌暴龙战士队} \\
-        \hline 
-        {\zihao{3} 团队编号：} & {\zihao{3} 8182} \\
-        \Xcline{1-1}{0.4pt} \Xcline{2-2}{1.5pt}
-        {\zihao{3} 队长姓名：} & {\zihao{3} 王睿恒} \\
-        \Xcline{1-1}{0.4pt} \Xcline{2-2}{1.5pt}
-        {\zihao{3} 队员 1 姓名：} & {\zihao{3} 杨林涛} \\
-        \Xcline{1-1}{0.4pt} \Xcline{2-2}{1.5pt}
-        {\zihao{3} 队员 2 姓名：} & {\zihao{3} 王彬玮 } \\
-        \Xcline{1-1}{0.4pt} \Xcline{2-2}{1.5pt}
-        {\zihao{3} 队员 3 姓名：} & {\zihao{3} 无} \\
-        \Xcline{1-1}{0.4pt} \Xcline{2-2}{1.5pt}
-        {\zihao{3} 指导教师：} & {\zihao{3} 无} \\
-        \Xcline{1-1}{0.4pt} \Xcline{2-2}{1.5pt} 
+    \renewcommand{\arraystretch}{2.0}
+    \setlength{\arrayrulewidth}{0.5pt}
+    \begin{tabularx}{0.85\textwidth}{>{\centering\arraybackslash}p{4cm} C}
+        \toprule[1.2pt]
+        {\zihao{3} 团队名称} & {\zihao{3} 宇宙无敌暴龙战士队} \\
+        \midrule
+        {\zihao{3} 团队编号} & {\zihao{3} 8182} \\
+        \midrule
+        {\zihao{3} 队长姓名} & {\zihao{3} 王睿恒} \\
+        \midrule
+        {\zihao{3} 队员 1 姓名} & {\zihao{3} 杨林涛} \\
+        \midrule
+        {\zihao{3} 队员 2 姓名} & {\zihao{3} 王彬玮} \\
+        \midrule
+        {\zihao{3} 队员 3 姓名} & {\zihao{3} 无} \\
+        \midrule
+        {\zihao{3} 指导教师} & {\zihao{3} 无} \\
+        \bottomrule[1.2pt]
     \end{tabularx}
 \end{center}
 
@@ -131,214 +163,215 @@
 
 % -------------------- 机械设计 --------------------
 \begin{reportframe}
-    \vspace{0.5em}
-    {\zihao{4} \bfseries 1、机器人机械设计方案}
-    \vspace{1em}
-    
-    \mybody 
+    \sectiontitle{1、机器人机械设计方案}
+
+    \mybody
     分为上、下车机械结构分别阐述。启动时上车置于下车之上。
 
     \begin{center}
+        \vspace{0.5em}
         \begin{minipage}{0.48\textwidth}
             \centering
-            \includegraphics[height=0.22\textheight]{image3.png} 
-            \vspace{0.5em} 
-            \\ {\small \bfseries 图 1：下车底板结构示意图}
+            \includegraphics[height=0.22\textheight]{image3.png}
+            \vspace{0.5em}
+            \captionof{figure}{下车底板结构示意图}
         \end{minipage}
-        \hfill 
+        \hfill
         \begin{minipage}{0.48\textwidth}
             \centering
-            \includegraphics[height=0.22\textheight]{image2.png} 
-            \vspace{0.5em} 
-            \\ {\small \bfseries 图 2：下车顶板结构示意图}
+            \includegraphics[height=0.22\textheight]{image2.png}
+            \vspace{0.5em}
+            \captionof{figure}{下车顶板结构示意图}
         \end{minipage}
+        \vspace{0.5em}
     \end{center}
 
-    \vspace{1em}
-    \textbf{（1）底板设计（见图 1）：} 底板作为下车的动力基准，采用高强度板材激光切割而成。其表面预留了高密度的安装孔位阵列，确保驱动电机座与万向轮支撑件的装配精度。通过将蓄电池等重型组件低重心布置，使整车重心高度处于安全包络内，显著提升了机器人高速转向时的动态稳定性。
-    
-    \vspace{0.5em}
-    \textbf{（2）顶板设计（见图 2）：} 顶板兼具结构加强与子车承载功能。
-    \begin{itemize}[leftmargin=1.5em, nosep]
-        \item \textbf{功能腰型槽}：中心布置的三组腰型槽在实现拓扑轻量化的同时，为子车的锁紧机构提供了 $\pm 25$mm 的机械调节冗余，增强了系统适配性。
+    \subsectiontitle{（1）底板设计（见图 1）}
+    底板作为下车的动力基准，采用高强度板材激光切割而成。其表面预留了高密度的安装孔位阵列，确保驱动电机座与万向轮支撑件的装配精度。通过将蓄电池等重型组件低重心布置，使整车重心高度处于安全包络内，显著提升了机器人高速转向时的动态稳定性。
+
+    \subsectiontitle{（2）顶板设计（见图 2）}
+    顶板兼具结构加强与子车承载功能。
+    \begin{itemize}[leftmargin=2em, itemsep=3pt, parsep=0pt, topsep=4pt]
+        \item \textbf{功能腰型槽}：中心布置的三组腰型槽在实现拓扑轻量化的同时，为子车的锁紧机构提供了 $\pm 25$\,mm 的机械调节冗余，增强了系统适配性。
         \item \textbf{90$^\circ$ 折弯工艺}：侧边采用折弯补强结构，极大地提高了板材的抗弯惯性矩，有效防止子车在载入对接过程中因局部受压而产生形变。
     \end{itemize}
 
-    \vspace{0.5em}
-    \textbf{（3）底盘工艺指标：} 板材选用 6061-T6 铝合金，加工公差控制在 $\pm 0.1$mm 级别。所有边缘均经过倒角处理，并预留了电气走线孔，实现了机械结构与电路系统的模块化集成。
-    
-    \vspace{1em}
-    \textbf{（4）专用物块推动机构设计（见图 3）：} 
-    
+    \subsectiontitle{（3）底盘工艺指标}
+    板材选用 6061-T6 铝合金，加工公差控制在 $\pm 0.1$\,mm 级别。所有边缘均经过倒角处理，并预留了电气走线孔，实现了机械结构与电路系统的模块化集成。
+
+    \subsectiontitle{（4）专用物块推动机构设计（见图 3）}
     推动机构（推块臂）是子母车方案中用于精确、一致地推动物块的核心执行部件。为避免因机构误差导致多车协同推动时物块倾斜或滑落，整体采用了非线性几何与严苛的公差设计。
 
     \begin{center}
-        \includegraphics[height=0.22\textheight]{image4.png} 
         \vspace{0.5em}
-        \\ {\small \bfseries 图 3：物块推动机构三维结构示意图}
+        \includegraphics[height=0.22\textheight]{image4.png}
+        \vspace{0.5em}
+        \captionof{figure}{物块推动机构三维结构示意图}
+        \vspace{0.3em}
     \end{center}
-    
-    \begin{itemize}[leftmargin=1.5em, nosep]
-        \item \textbf{多节弯曲避障臂}：臂体采用特定的非线性弯曲几何形状，在有效避让物块上方潜在障碍物的同时，优化了刚性分布。经有限元分析（FEA）验证，在受侧向推力时其弹性形变 $\delta \leq 0.05$mm。
-        \item \textbf{高精度法兰与执行推块}：顶部法兰通过四个沉头孔与车体刚性连接，保证极大的扭转惯性矩。底部执行推块（基准面 1）的宽度公差严格控制在 $\pm 0.50$mm 以内，接触面垂直度公差 $\leq \pm 0.1^\circ$，确保动作的正交性与一致性。
+
+    \begin{itemize}[leftmargin=2em, itemsep=3pt, parsep=0pt, topsep=4pt]
+        \item \textbf{多节弯曲避障臂}：臂体采用特定的非线性弯曲几何形状，在有效避让物块上方潜在障碍物的同时，优化了刚性分布。经有限元分析（FEA）验证，在受侧向推力时其弹性形变 $\delta \leq 0.05$\,mm。
+        \item \textbf{高精度法兰与执行推块}：顶部法兰通过四个沉头孔与车体刚性连接，保证极大的扭转惯性矩。底部执行推块（基准面 1）的宽度公差严格控制在 $\pm 0.50$\,mm 以内，接触面垂直度公差 $\leq \pm 0.1^\circ$，确保动作的正交性与一致性。
         \item \textbf{材料与表面处理}：主体采用 6061-T6 铝合金进行五轴 CNC 精密加工，以降低运动惯量。接触面经阳极氧化处理并添加 PTFE（聚四氟乙烯）涂层，显著降低磨损，保障长期作业精度。
     \end{itemize}
-    
-    \vspace*{\fill} % 自动把黑框顶到底部
+
+    \vspace*{\fill}
 \end{reportframe}
 
 \clearpage
 
 % -------------------- 电路设计 --------------------
 \begin{reportframe}
-    \vspace{0.5em}
-    {\zihao{4} \bfseries 2、机器人电路设计方案}
-    \vspace{2em} 
+    \sectiontitle{2、机器人电路设计方案}
+
+    \mybody
+    以下为本机器人所选用的核心电子元器件清单：
+
+    \vspace{1em}
 
     % ==================== 第一排 ====================
     \noindent
     \begin{minipage}[t]{0.48\textwidth}
         \centering
-        \includegraphics[height=3cm]{images/315mHz四路.png} 
-        \vspace{1em}
-        \par \centerline{· 315mHz 四路} 
+        \includegraphics[height=3cm]{images/315mHz四路.png}
+        \vspace{0.5em}
+        \captionof{figure}{315\,mHz 四路}
     \end{minipage}%
     \hfill
     \begin{minipage}[t]{0.48\textwidth}
         \centering
-        \includegraphics[height=3cm]{images/520霍尔编码器直流减速机.png} 
-        \vspace{1em}
-        \par \centerline{· 520 霍尔编码器直流减速机}
+        \includegraphics[height=3cm]{images/520霍尔编码器直流减速机.png}
+        \vspace{0.5em}
+        \captionof{figure}{520 霍尔编码器直流减速机}
     \end{minipage}
 
-    \vspace{2em} 
+    \vspace{1.5em}
 
     % ==================== 第二排 ====================
     \noindent
     \begin{minipage}[t]{0.48\textwidth}
         \centering
-        \includegraphics[height=3cm]{images/蜂鸣器1-8s二合一电量显示器.png} 
-        \vspace{1em}
-        \par \centerline{· 蜂鸣器 1-8s 二合一电量显示器}
+        \includegraphics[height=3cm]{images/蜂鸣器1-8s二合一电量显示器.png}
+        \vspace{0.5em}
+        \captionof{figure}{蜂鸣器 1-8s 二合一电量显示器}
     \end{minipage}%
     \hfill
     \begin{minipage}[t]{0.48\textwidth}
         \centering
-        \includegraphics[height=3cm]{images/格式电池.png} 
-        \vspace{1em}
-        \par \centerline{· 格式电池}
+        \includegraphics[height=3cm]{images/格式电池.png}
+        \vspace{0.5em}
+        \captionof{figure}{格式电池}
     \end{minipage}
 
-    \vspace{2em} 
+    \vspace{1.5em}
 
     % ==================== 第三排 ====================
     \noindent
     \begin{minipage}[t]{0.48\textwidth}
         \centering
-        \includegraphics[height=3cm]{images/六轴机械臂抓手.png} 
-        \vspace{1em}
-        \par \centerline{· 六轴机械臂抓手}
+        \includegraphics[height=3cm]{images/六轴机械臂抓手.png}
+        \vspace{0.5em}
+        \captionof{figure}{六轴机械臂抓手}
     \end{minipage}%
     \hfill
     \begin{minipage}[t]{0.48\textwidth}
         \centering
         \includegraphics[height=3cm]{images/数字舵机.png}
-        \vspace{1em}
-        \par \centerline{· 数字舵机}
+        \vspace{0.5em}
+        \captionof{figure}{数字舵机}
     \end{minipage}
 
-    \vspace*{\fill} 
+    \vspace*{\fill}
 \end{reportframe}
 \clearpage
 
 % -------------------- 电路设计（续页 - 无表头版） --------------------
 \begin{reportframe_notitle}
-    \vspace{1.5em} 
+    \vspace{1em}
 
     % ==================== 第一排 ====================
     \noindent
     \begin{minipage}[t]{0.48\textwidth}
         \centering
-        \includegraphics[height=3cm]{images/直流减速电机GMR霍尔编码器.png} 
-        \vspace{1em}
-        \par \centerline{· 直流减速电机GMR霍尔编码器} 
+        \includegraphics[height=3cm]{images/直流减速电机GMR霍尔编码器.png}
+        \vspace{0.5em}
+        \captionof{figure}{直流减速电机 GMR 霍尔编码器}
     \end{minipage}%
     \hfill
     \begin{minipage}[t]{0.48\textwidth}
         \centering
-        \includegraphics[height=3cm]{images/AT8236双路驱动模块带稳压板.png} 
-        \vspace{1em}
-        \par \centerline{· AT8236双路驱动模块带稳压板}
+        \includegraphics[height=3cm]{images/AT8236双路驱动模块带稳压板.png}
+        \vspace{0.5em}
+        \captionof{figure}{AT8236 双路驱动模块带稳压板}
     \end{minipage}
 
-    \vspace{2em} 
+    \vspace{1.5em}
 
     % ==================== 第二排 ====================
     \noindent
     \begin{minipage}[t]{0.48\textwidth}
         \centering
-        \includegraphics[height=3cm]{images/K230视觉模块.png} 
-        \vspace{1em}
-        \par \centerline{· K230视觉模块}
+        \includegraphics[height=3cm]{images/K230视觉模块.png}
+        \vspace{0.5em}
+        \captionof{figure}{K230 视觉模块}
     \end{minipage}%
     \hfill
     \begin{minipage}[t]{0.48\textwidth}
         \centering
-        \includegraphics[height=3cm]{images/STM32H743ZIT6核心板.png} 
-        \vspace{1em}
-        \par \centerline{· STM32H743ZIT6核心板}
+        \includegraphics[height=3cm]{images/STM32H743ZIT6核心板.png}
+        \vspace{0.5em}
+        \captionof{figure}{STM32H743ZIT6 核心板}
     \end{minipage}
 
-    \vspace{2em} 
+    \vspace{1.5em}
 
     % ==================== 第三排 ====================
     \noindent
     \begin{minipage}[t]{0.48\textwidth}
         \centering
-        \includegraphics[height=3cm]{images/STM32H743ZIT6核心板.png} % (如果你这排左侧图片不一样，请自己改名字)
-        \vspace{1em}
-        \par \centerline{· STM32H743ZIT6核心板}
+        \includegraphics[height=3cm]{images/STM32H743ZIT6核心板.png}
+        \vspace{0.5em}
+        \captionof{figure}{STM32H743ZIT6 核心板}
     \end{minipage}%
     \hfill
     \begin{minipage}[t]{0.48\textwidth}
         \centering
         \includegraphics[height=3cm]{images/STM32H750VBT6开发板.png}
-        \vspace{1em}
-        \par \centerline{· STM32H750VBT6开发板}
+        \vspace{0.5em}
+        \captionof{figure}{STM32H750VBT6 开发板}
     \end{minipage}
 
-    \vspace*{\fill} 
+    \vspace*{\fill}
 \end{reportframe_notitle}
 
 \clearpage
 
 % -------------------- 第四部分：软件设计 --------------------
 \begin{reportframe}
-    \vspace{0.5em}
-    {\zihao{4} \bfseries 3、机器人软件设计方案}
-    \vspace{1em}
+    \sectiontitle{3、机器人软件设计方案}
 
     \mybody
     软件系统基于 STM32 平台，采用 C 语言开发，以模块化方式组织代码，将底盘控制、巡线、视觉通信与机械臂控制分别封装为独立功能模块，由主程序统一调度。
 
-    \vspace{0.5em}
-    \textbf{（1）整体架构：} 主程序通过状态机管理机器人行为，定义若干运行状态（如 \texttt{LINE\_FOLLOWING}、\texttt{VISION\_TRACKING}、\texttt{ARM\_GRABBING} 等），每个控制周期根据当前状态调用对应的功能函数，实现任务的有序切换与执行。
+    \subsectiontitle{（1）整体架构}
+    主程序通过状态机管理机器人行为，定义若干运行状态（如 \texttt{LINE\_FOLLOWING}、\texttt{VISION\_TRACKING}、\texttt{ARM\_GRABBING} 等），每个控制周期根据当前状态调用对应的功能函数，实现任务的有序切换与执行。
 
-    \vspace{0.5em}
-    \textbf{（2）底盘运动控制：} 基于麦克纳姆轮运动学模型，推导四轮转速与整车速度向量（$v_x$、$v_y$、$\omega$）之间的映射关系，封装为 \texttt{Chassis\_SetVelocity()} 函数。结合 MG513 编码器的转速反馈，对各轮分别实施 PID 闭环调速，保证直行与全向移动的精度。
+    \subsectiontitle{（2）底盘运动控制}
+    基于麦克纳姆轮运动学模型，推导四轮转速与整车速度向量（$v_x$、$v_y$、$\omega$）之间的映射关系，封装为 \texttt{Chassis\_SetVelocity()} 函数。结合 MG513 编码器的转速反馈，对各轮分别实施 PID 闭环调速，保证直行与全向移动的精度。
 
-    \vspace{0.5em}
-    \textbf{（3）巡线模块：} 读取多路红外传感器的数字电平，通过加权偏差算法计算当前偏移量，将偏差输入 PID 控制器，输出左右侧电机的差速修正量，实现稳定巡线。当传感器检测到十字路口特征时，触发路口判断逻辑，执行预设的直行、转弯或停车动作。
+    \subsectiontitle{（3）巡线模块}
+    读取多路红外传感器的数字电平，通过加权偏差算法计算当前偏移量，将偏差输入 PID 控制器，输出左右侧电机的差速修正量，实现稳定巡线。当传感器检测到十字路口特征时，触发路口判断逻辑，执行预设的直行、转弯或停车动作。
 
-    \vspace{0.5em}
-    \textbf{（4）视觉融合：} K30 视觉模块通过串口中断方式向 STM32 发送目标坐标帧。主控解析坐标后，在视觉追踪状态下计算目标与图像中心的像素偏差，换算为底盘横移与旋转指令，驱动小车对准目标，随后切换至机械臂抓取状态。
+    \subsectiontitle{（4）视觉融合}
+    K30 视觉模块通过串口中断方式向 STM32 发送目标坐标帧。主控解析坐标后，在视觉追踪状态下计算目标与图像中心的像素偏差，换算为底盘横移与旋转指令，驱动小车对准目标，随后切换至机械臂抓取状态。
 
-    \vspace{0.5em}
-    \textbf{（5）机械臂控制：} 升降步进电机通过脉冲数控制丝杆位移，封装为 \texttt{Arm\_MoveTo(height)} 函数；舵机夹取通过 \texttt{Servo\_SetAngle()} 设定张合角度。抓取流程为：下降至目标高度 $\rightarrow$ 舵机夹紧 $\rightarrow$ 上升至安全高度 $\rightarrow$ 运送至目标区域 $\rightarrow$ 舵机释放。
+    \subsectiontitle{（5）机械臂控制}
+    升降步进电机通过脉冲数控制丝杆位移，封装为 \texttt{Arm\_MoveTo(height)} 函数；舵机夹取通过 \texttt{Servo\_SetAngle()} 设定张合角度。抓取流程为：下降至目标高度 $\rightarrow$ 舵机夹紧 $\rightarrow$ 上升至安全高度 $\rightarrow$ 运送至目标区域 $\rightarrow$ 舵机释放。
 
-    \vspace{0.5em}
-    \textbf{（6）已完成功能：} 目前已完成巡线、路口判断、底盘全向运动、视觉串口解析等基础功能，机械臂抓取流程与完整状态机仍在调试优化中，以最终参赛代码为准。
-    
+    \subsectiontitle{（6）已完成功能}
+    目前已完成巡线、路口判断、底盘全向运动、视觉串口解析等基础功能，机械臂抓取流程与完整状态机仍在调试优化中，以最终参赛代码为准。
+
     \vspace*{\fill}
 \end{reportframe}
 
@@ -346,40 +379,37 @@
 
 % -------------------- 第五部分：流程与实现 --------------------
 \begin{reportframe}
-    \vspace{0.5em}
-    {\zihao{4} \bfseries 4、机器人完赛流程及基本功能实现方案}
-    \vspace{1em}
+    \sectiontitle{4、机器人完赛流程及基本功能实现方案}
 
     \mybody
     本机器人为单车设计，启动后按照预设策略自主完成比赛全程，整体流程分为以下阶段：
 
-    \vspace{0.5em}
-    \textbf{（1）启动阶段：} 裁判发出开始信号后，机器人完成 STM32 系统自检与各模块初始化，确认巡线传感器、K30 视觉模块及机械臂均处于正常工作状态，随即进入巡线行进模式，驶离启动区。
+    \subsectiontitle{（1）启动阶段}
+    裁判发出开始信号后，机器人完成 STM32 系统自检与各模块初始化，确认巡线传感器、K30 视觉模块及机械臂均处于正常工作状态，随即进入巡线行进模式，驶离启动区。
 
-    \vspace{0.5em}
-    \textbf{（2）目标搜寻阶段：} 机器人沿地面引导线巡线行驶，K30 视觉模块持续扫描周围环境。一旦识别到目标物体（方块或圆环），主控切换至视觉追踪模式，驱动底盘横移对准目标，精确定位后触发抓取流程。
+    \subsectiontitle{（2）目标搜寻阶段}
+    机器人沿地面引导线巡线行驶，K30 视觉模块持续扫描周围环境。一旦识别到目标物体（方块或圆环），主控切换至视觉追踪模式，驱动底盘横移对准目标，精确定位后触发抓取流程。
 
-    \vspace{0.5em}
-    \textbf{（3）抓取阶段：} 底盘对准目标后，机械臂按照预设动作序列执行抓取：丝杆下降至对应高度，舵机夹紧目标物体，随后丝杆上升至安全高度，完成稳定夹持。
+    \subsectiontitle{（3）抓取阶段}
+    底盘对准目标后，机械臂按照预设动作序列执行抓取：丝杆下降至对应高度，舵机夹紧目标物体，随后丝杆上升至安全高度，完成稳定夹持。
 
-    \vspace{0.5em}
-    \textbf{（4）运送与放置阶段：} 机器人夹持目标物体后重新切换至巡线模式，按路径规划函数输出的路线行驶至目标得分区（二分区或三分区）。到达目标位置后，机械臂下降，舵机松开，将物体放置于得分区内，完成得分动作。
+    \subsectiontitle{（4）运送与放置阶段}
+    机器人夹持目标物体后重新切换至巡线模式，按路径规划函数输出的路线行驶至目标得分区（二分区或三分区）。到达目标位置后，机械臂下降，舵机松开，将物体放置于得分区内，完成得分动作。
 
-    \vspace{0.5em}
-    \textbf{（5）循环执行：} 完成一次放置后，机器人重新进入目标搜寻阶段，按照上述流程循环往复，直至比赛时间结束。
+    \subsectiontitle{（5）循环执行}
+    完成一次放置后，机器人重新进入目标搜寻阶段，按照上述流程循环往复，直至比赛时间结束。
 
-    \vspace{0.5em}
-    \textbf{（6）核心功能实现要点：}
-    \begin{itemize}[leftmargin=1.5em, nosep]
+    \subsectiontitle{（6）核心功能实现要点}
+    \begin{itemize}[leftmargin=2em, itemsep=3pt, parsep=0pt, topsep=4pt]
         \item \textbf{巡线稳定性}：采用 PID 差速控制，确保在不同路面条件下均能可靠追线，避免偏轨。
         \item \textbf{视觉定位精度}：K30 模块输出目标像素坐标，主控通过比例控制将底盘对准目标，减小抓取误差。
         \item \textbf{机械臂重复定位}：步进电机配合限位检测，保证每次抓取高度一致，提升成功率。
         \item \textbf{状态机鲁棒性}：各功能模块间通过状态机严格切换，避免多任务竞争导致的指令冲突。
     \end{itemize}
 
-    \vspace{0.5em}
+    \vspace{0.8em}
     综上，本方案通过巡线与视觉的有机融合，结合 STM32 的实时调度能力，实现了一套具备自主搜索、精准抓取与高效运送能力的完整竞赛解决方案。
-    
+
     \vspace*{\fill}
 \end{reportframe}
 
