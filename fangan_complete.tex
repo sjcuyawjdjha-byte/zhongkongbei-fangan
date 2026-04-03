@@ -166,7 +166,7 @@
     \sectiontitle{1、机器人机械设计方案}
 
     \mybody
-    分为上、下车机械结构分别阐述。启动时上车置于下车之上。
+    本机器人采用子母车架构，整体机械功能涵盖\textbf{全向移动底盘}与\textbf{物块推动机构}两大核心模块。下车（母车）承担移动与承载任务，搭载四组麦克纳姆轮实现全向运动；上车（子车）承担物块推动执行任务。整体采用双层 6061-T6 铝合金板材框架，上下层之间通过 M3 铜柱螺接为一体，子车经顶板腰型槽与锁紧螺栓固定于母车之上，可实现高速全向移动、稳定承载与精确推块。
 
     \begin{center}
         \vspace{0.5em}
@@ -187,10 +187,10 @@
     \end{center}
 
     \subsectiontitle{（1）底板设计（见图 1）}
-    底板作为下车的动力基准，采用高强度板材激光切割而成。其表面预留了高密度的安装孔位阵列，确保驱动电机座与万向轮支撑件的装配精度。通过将蓄电池等重型组件低重心布置，使整车重心高度处于安全包络内，显著提升了机器人高速转向时的动态稳定性。
+    底板作为下车的动力基准，采用 6061-T6 铝合金板材激光切割而成。其表面预留了高密度的安装孔位阵列，四组驱动电机座通过 M3 螺栓固定于底板预留孔位，万向轮支撑件经定位销与螺栓双重定位连接。蓄电池通过扎带与防滑垫固定于底板中央低位区域，使整车重心处于安全包络内，显著提升了高速转向时的动态稳定性。
 
     \subsectiontitle{（2）顶板设计（见图 2）}
-    顶板兼具结构加强与子车承载功能。
+    顶板兼具结构加强与子车承载功能，通过四根 M3 铜柱与底板螺接形成刚性双层框架。子车通过腰型槽配合锁紧螺栓固定于顶板上表面。
     \begin{itemize}[leftmargin=2em, itemsep=3pt, parsep=0pt, topsep=4pt]
         \item \textbf{功能腰型槽}：中心布置的三组腰型槽在实现拓扑轻量化的同时，为子车的锁紧机构提供了 $\pm 25$\,mm 的机械调节冗余，增强了系统适配性。
         \item \textbf{90$^\circ$ 折弯工艺}：侧边采用折弯补强结构，极大地提高了板材的抗弯惯性矩，有效防止子车在载入对接过程中因局部受压而产生形变。
@@ -212,7 +212,7 @@
 
     \begin{itemize}[leftmargin=2em, itemsep=3pt, parsep=0pt, topsep=4pt]
         \item \textbf{多节弯曲避障臂}：臂体采用特定的非线性弯曲几何形状，在有效避让物块上方潜在障碍物的同时，优化了刚性分布。经有限元分析（FEA）验证，在受侧向推力时其弹性形变 $\delta \leq 0.05$\,mm。
-        \item \textbf{高精度法兰与执行推块}：顶部法兰通过四个沉头孔与车体刚性连接，保证极大的扭转惯性矩。底部执行推块（基准面 1）的宽度公差严格控制在 $\pm 0.50$\,mm 以内，接触面垂直度公差 $\leq \pm 0.1^\circ$，确保动作的正交性与一致性。
+        \item \textbf{高精度法兰与执行推块}：顶部法兰通过四个 M4 沉头螺栓与车体刚性连接，保证极大的扭转惯性矩。底部执行推块（基准面 1）的宽度公差严格控制在 $\pm 0.50$\,mm 以内，接触面垂直度公差 $\leq \pm 0.1^\circ$，确保动作的正交性与一致性。
         \item \textbf{材料与表面处理}：主体采用 6061-T6 铝合金进行五轴 CNC 精密加工，以降低运动惯量。接触面经阳极氧化处理并添加 PTFE（聚四氟乙烯）涂层，显著降低磨损，保障长期作业精度。
     \end{itemize}
 
@@ -226,21 +226,41 @@
     \sectiontitle{2、机器人电路设计方案}
 
     \mybody
-    以下为本机器人所选用的核心电子元器件清单：
+    电路系统是机器人的"神经与血管"，负责能源供给、信号处理与运动控制。整体采用\textbf{"电源$\,\to\,$主控$\,\to\,$驱动$\,\to\,$感知"}四层架构，各层之间通过标准化接口连接，便于独立调试与模块化更换。
 
-    \vspace{0.3em}
+    \subsectiontitle{（1）电源系统}
+    采用格式锂电池作为全车唯一动力源，电池通过 XT60 接头连接至电源分配板，分为两条独立回路：\textbf{动力回路}直接为 AT8236 电机驱动模块供电；\textbf{逻辑回路}经 AT8236 板载稳压电路降压至 5\,V / 3.3\,V，分别为舵机与 STM32 主控、K230 视觉模块供电。蜂鸣器电量显示器并联于电池端，实时监测电压，低压时自动报警，防止比赛中意外断电。
+
+    \subsectiontitle{（2）主控系统}
+    以 \textbf{STM32H743ZIT6} 为主控核心，运行巡线 PID、状态机调度与视觉数据解析等全部上层逻辑；\textbf{STM32H750VBT6} 作为副控，专职负责机械臂步进电机脉冲输出与舵机 PWM 生成。主控与副控之间通过 UART 串口（TTL 电平直连）交换状态指令与坐标数据。\textbf{K230 视觉模块}同样经 UART 串口接入主控，以固定帧率输出目标物体的像素坐标。
+
+    \subsectiontitle{（3）驱动系统}
+    底盘四轮各配一台 520 直流减速电机（内置霍尔编码器），由两块 \textbf{AT8236 双路驱动模块}分别驱动。编码器 A/B 相信号接入 STM32 定时器编码器接口，实现四轮独立闭环调速。机械臂夹取由\textbf{数字舵机}完成，通过主控 PWM 输出精确控制张合角度；升降机构采用步进电机驱动丝杆，由副控脉冲方向接口控制行程。
+
+    \subsectiontitle{（4）通信与安全}
+    \textbf{315\,MHz 四路遥控模块}用于远程启停与紧急制动，接收端 IO 直连主控 GPIO 中断引脚，响应延迟 $<\!10$\,ms。整车线缆采用端子化接插件（XH2.54 / PH2.0），便于快速拆装与故障排查。
+
+    \vspace{0.5em}
+    以下为核心电子元器件实物清单：
+
+    \vspace*{\fill}
+\end{reportframe}
+\clearpage
+
+% -------------------- 电路设计（元器件图片页1） --------------------
+\begin{reportframe_notitle}[breakable=false]
 
     % ==================== 第一排 ====================
     \noindent
     \begin{minipage}[t]{0.48\textwidth}
         \centering
-        \includegraphics[height=4.5cm, keepaspectratio]{images/315mHz四路.png}\\[0.2em]
+        \includegraphics[height=6.2cm, keepaspectratio]{images/315mHz四路.png}\\[0.2em]
         \captionof{figure}{315\,mHz 四路}
     \end{minipage}%
     \hfill
     \begin{minipage}[t]{0.48\textwidth}
         \centering
-        \includegraphics[height=4.5cm, keepaspectratio]{images/520霍尔编码器直流减速机.png}\\[0.2em]
+        \includegraphics[height=6.2cm, keepaspectratio]{images/520霍尔编码器直流减速机.png}\\[0.2em]
         \captionof{figure}{520 霍尔编码器直流减速机}
     \end{minipage}
 
@@ -250,13 +270,13 @@
     \noindent
     \begin{minipage}[t]{0.48\textwidth}
         \centering
-        \includegraphics[height=4.5cm, keepaspectratio]{images/蜂鸣器1-8s二合一电量显示器.png}\\[0.2em]
+        \includegraphics[height=6.2cm, keepaspectratio]{images/蜂鸣器1-8s二合一电量显示器.png}\\[0.2em]
         \captionof{figure}{蜂鸣器 1-8s 二合一电量显示器}
     \end{minipage}%
     \hfill
     \begin{minipage}[t]{0.48\textwidth}
         \centering
-        \includegraphics[height=4.5cm, keepaspectratio]{images/格式电池.png}\\[0.2em]
+        \includegraphics[height=6.2cm, keepaspectratio]{images/格式电池.png}\\[0.2em]
         \captionof{figure}{格式电池}
     \end{minipage}
 
@@ -266,21 +286,21 @@
     \noindent
     \begin{minipage}[t]{0.48\textwidth}
         \centering
-        \includegraphics[height=4.5cm, keepaspectratio]{images/六轴机械臂抓手.png}\\[0.2em]
+        \includegraphics[height=6.2cm, keepaspectratio]{images/六轴机械臂抓手.png}\\[0.2em]
         \captionof{figure}{六轴机械臂抓手}
     \end{minipage}%
     \hfill
     \begin{minipage}[t]{0.48\textwidth}
         \centering
-        \includegraphics[height=4.5cm, keepaspectratio]{images/数字舵机.png}\\[0.2em]
+        \includegraphics[height=6.2cm, keepaspectratio]{images/数字舵机.png}\\[0.2em]
         \captionof{figure}{数字舵机}
     \end{minipage}
 
     \vspace*{\fill}
-\end{reportframe}
+\end{reportframe_notitle}
 \clearpage
 
-% -------------------- 电路设计（续页 - 无表头版） --------------------
+% -------------------- 电路设计（元器件图片页2） --------------------
 \begin{reportframe_notitle}[breakable=false]
 
     % ==================== 第一排 ====================
@@ -339,19 +359,19 @@
     \sectiontitle{3、机器人软件设计方案}
 
     \mybody
-    软件系统基于 STM32 平台，采用 C 语言开发，以模块化方式组织代码，将底盘控制、巡线、视觉通信与机械臂控制分别封装为独立功能模块，由主程序统一调度。
+    软件系统承担机器人的全部自主决策与控制任务，主要实现四大核心功能：\textbf{全向底盘运动控制}、\textbf{红外巡线导航}、\textbf{视觉目标识别与定位}以及\textbf{机械臂抓取控制}。系统基于 STM32H743ZIT6 平台，采用 C 语言在 Keil MDK 环境下开发，以模块化方式组织代码，将上述功能分别封装为独立模块，由主程序状态机统一调度。设计目标为实现全自主完赛，无需人工干预，巡线偏差控制在 5\,mm 以内，视觉定位精度优于 1\,cm。
 
     \subsectiontitle{（1）整体架构}
-    主程序通过状态机管理机器人行为，定义若干运行状态（如 \texttt{LINE\_FOLLOWING}、\texttt{VISION\_TRACKING}、\texttt{ARM\_GRABBING} 等），每个控制周期根据当前状态调用对应的功能函数，实现任务的有序切换与执行。
+    主程序运行于 STM32H743ZIT6 主控芯片上，通过有限状态机管理机器人行为，定义若干运行状态（如 \texttt{LINE\_FOLLOWING}、\texttt{VISION\_TRACKING}、\texttt{ARM\_GRABBING} 等），每个控制周期（10\,ms）根据当前状态调用对应的功能函数，实现任务的有序切换与执行。副控 STM32H750VBT6 接收主控指令，专职执行机械臂运动控制。
 
     \subsectiontitle{（2）底盘运动控制}
     基于麦克纳姆轮运动学模型，推导四轮转速与整车速度向量（$v_x$、$v_y$、$\omega$）之间的映射关系，封装为 \texttt{Chassis\_SetVelocity()} 函数。结合 MG513 编码器的转速反馈，对各轮分别实施 PID 闭环调速，保证直行与全向移动的精度。
 
     \subsectiontitle{（3）巡线模块}
-    读取多路红外传感器的数字电平，通过加权偏差算法计算当前偏移量，将偏差输入 PID 控制器，输出左右侧电机的差速修正量，实现稳定巡线。当传感器检测到十字路口特征时，触发路口判断逻辑，执行预设的直行、转弯或停车动作。
+    读取底盘前端 8 路红外循迹传感器的数字电平，通过加权偏差算法计算当前偏移量，将偏差输入 PID 控制器，输出左右侧电机的差速修正量，实现稳定巡线。当传感器检测到十字路口特征（多路同时触发）时，触发路口判断逻辑，执行预设的直行、转弯或停车动作。
 
     \subsectiontitle{（4）视觉融合}
-    K30 视觉模块通过串口中断方式向 STM32 发送目标坐标帧。主控解析坐标后，在视觉追踪状态下计算目标与图像中心的像素偏差，换算为底盘横移与旋转指令，驱动小车对准目标，随后切换至机械臂抓取状态。
+    K230 视觉模块通过串口中断方式向 STM32 发送目标坐标帧。主控解析坐标后，在视觉追踪状态下计算目标与图像中心的像素偏差，换算为底盘横移与旋转指令，驱动小车对准目标，随后切换至机械臂抓取状态。
 
     \subsectiontitle{（5）机械臂控制}
     升降步进电机通过脉冲数控制丝杆位移，封装为 \texttt{Arm\_MoveTo(height)} 函数；舵机夹取通过 \texttt{Servo\_SetAngle()} 设定张合角度。抓取流程为：下降至目标高度 $\rightarrow$ 舵机夹紧 $\rightarrow$ 上升至安全高度 $\rightarrow$ 运送至目标区域 $\rightarrow$ 舵机释放。
@@ -369,13 +389,13 @@
     \sectiontitle{4、机器人完赛流程及基本功能实现方案}
 
     \mybody
-    本机器人为单车设计，启动后按照预设策略自主完成比赛全程，整体流程分为以下阶段：
+    本机器人具备\textbf{全向移动、自主巡线、视觉识别、机械臂抓取}四大核心功能，启动后按照预设策略全自主完成比赛全程，无需人工遥控干预。整体流程分为以下阶段：
 
     \subsectiontitle{（1）启动阶段}
-    裁判发出开始信号后，机器人完成 STM32 系统自检与各模块初始化，确认巡线传感器、K30 视觉模块及机械臂均处于正常工作状态，随即进入巡线行进模式，驶离启动区。
+    裁判发出开始信号后，机器人完成 STM32 系统自检与各模块初始化，确认巡线传感器、K230 视觉模块及机械臂均处于正常工作状态，随即进入巡线行进模式，驶离启动区。
 
     \subsectiontitle{（2）目标搜寻阶段}
-    机器人沿地面引导线巡线行驶，K30 视觉模块持续扫描周围环境。一旦识别到目标物体（方块或圆环），主控切换至视觉追踪模式，驱动底盘横移对准目标，精确定位后触发抓取流程。
+    机器人沿地面引导线巡线行驶，K230 视觉模块持续扫描周围环境。一旦识别到目标物体（方块或圆环），主控切换至视觉追踪模式，驱动底盘横移对准目标，精确定位后触发抓取流程。
 
     \subsectiontitle{（3）抓取阶段}
     底盘对准目标后，机械臂按照预设动作序列执行抓取：丝杆下降至对应高度，舵机夹紧目标物体，随后丝杆上升至安全高度，完成稳定夹持。
@@ -389,7 +409,7 @@
     \subsectiontitle{（6）核心功能实现要点}
     \begin{itemize}[leftmargin=2em, itemsep=3pt, parsep=0pt, topsep=4pt]
         \item \textbf{巡线稳定性}：采用 PID 差速控制，确保在不同路面条件下均能可靠追线，避免偏轨。
-        \item \textbf{视觉定位精度}：K30 模块输出目标像素坐标，主控通过比例控制将底盘对准目标，减小抓取误差。
+        \item \textbf{视觉定位精度}：K230 模块输出目标像素坐标，主控通过比例控制将底盘对准目标，减小抓取误差。
         \item \textbf{机械臂重复定位}：步进电机配合限位检测，保证每次抓取高度一致，提升成功率。
         \item \textbf{状态机鲁棒性}：各功能模块间通过状态机严格切换，避免多任务竞争导致的指令冲突。
     \end{itemize}
